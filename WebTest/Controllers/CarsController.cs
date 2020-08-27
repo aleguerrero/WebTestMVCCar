@@ -20,9 +20,23 @@ namespace WebTest.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Car.ToListAsync());
+            var cars = from m in _context.Car
+                         select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                cars = cars.Where(s => s.Model.Contains(searchString));
+            }
+
+            return View(await cars.ToListAsync());
+        }
+
+        [HttpPost]
+        public string Index(string searchString, bool notUsed)
+        {
+            return "From [HttpPost]Index: filter on " + searchString;
         }
 
         // GET: Cars/Details/5
