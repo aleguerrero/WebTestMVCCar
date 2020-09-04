@@ -20,23 +20,33 @@ namespace WebTest.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string carMake, string searchString)
         {
+            // Use LINQ to get list of genres.
+            IQueryable<string> makesQuery = from m in _context.Car
+                                            orderby m.Make
+                                            select m.Make;
+
             var cars = from m in _context.Car
                          select m;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 cars = cars.Where(s => s.Model.Contains(searchString));
             }
 
-            return View(await cars.ToListAsync());
-        }
+            if (!string.IsNullOrEmpty(carMake))
+            {
+                cars = cars.Where(x => x.Make == carMake);
+            }
 
-        [HttpPost]
-        public string Index(string searchString, bool notUsed)
-        {
-            return "From [HttpPost]Index: filter on " + searchString;
+            var carMakeVM = new CarMakeViewModel
+            {
+                Makes = new SelectList(await makesQuery.Distinct().ToListAsync()),
+                Cars = await cars.ToListAsync()
+            };
+
+            return View(carMakeVM);
         }
 
         // GET: Cars/Details/5
@@ -68,7 +78,7 @@ namespace WebTest.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Make,ReleaseDate,Model,Price")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Make,ReleaseDate,Model,Price,Trim")] Car car)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +110,7 @@ namespace WebTest.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Make,ReleaseDate,Model,Price")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Make,ReleaseDate,Model,Price,Trim")] Car car)
         {
             if (id != car.Id)
             {

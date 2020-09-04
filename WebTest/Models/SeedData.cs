@@ -28,7 +28,8 @@ namespace WebTest.Models
                         Make = "Toyota",
                         ReleaseDate = DateTime.Parse("1992-1-1"),
                         Model = "Supra",
-                        Price = 32000
+                        Price = 32000,
+                        Trim = "RZ"
                     },
 
                     new Car
@@ -36,15 +37,17 @@ namespace WebTest.Models
                         Make = "Honda",
                         ReleaseDate = DateTime.Parse("1994-1-1"),
                         Model = "NSX",
-                        Price = 40000
+                        Price = 40000,
+                        Trim = "Type R"
                     },
 
                     new Car
                     {
                         Make = "Porsche",
                         ReleaseDate = DateTime.Parse("1992-1-1"),
-                        Model = "911 Turbo",
-                        Price = 50000
+                        Model = "911",
+                        Price = 50000,
+                        Trim = "Turbo"
                     },
 
                     new Car
@@ -52,7 +55,8 @@ namespace WebTest.Models
                         Make = "Mazda",
                         ReleaseDate = DateTime.Parse("1994-1-1"),
                         Model = "RX-7",
-                        Price = 35000
+                        Price = 35000,
+                        Trim = "Turbo"
                     }
                 );
                 context.SaveChanges();
